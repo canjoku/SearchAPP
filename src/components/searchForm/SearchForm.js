@@ -1,36 +1,49 @@
 import React from 'react';
+import axios from 'axios';
+import ImageList from '../imageList/ImageList'
 
 class SearchForm extends React.Component {
   constructor(props) {
-    super()
+    super(props)
     this.state = {
-      carDetails: { carName: '', carAge: 0 },
-      carList: []
+      imageName: '',
+      imageList: []
     }
-
-
+    
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleSubmit(e) {
-    
+  async handleSubmit(e) {
+
     e.preventDefault()
-    //use axios here to perform serach and return list of cars which gets tagged onto state
+    let response = await axios.get('https://api.unsplash.com/search/photos', {
+      params: {
+        query: this.state.imageName,
+      },
+      headers: {
+        Authorization: 'Client-ID 6DcvGsPFyLWRx-FyMCs97yMfP3iAa7GdIRmOGXFk-js',
+      }
+    });
+    this.setState({imageList: response.data.results})
   }
 
+
   handleChange(e) {
-    this.setState({carDetails: {carName: e.target.value}})
+    this.setState({imageName: e.target.value})
   }
 
   render() {
     return(
-      <div>
-        <form onSubmit = {this.handleSubmit}>
-          <input value={this.state.car} type='text' placeholder='enter car name' onChange={this.handleChange} />
+      <div className='ui segment'>
+        <form className ='ui form' onSubmit = {this.handleSubmit}>
+          <label>Image Search</label>
+          <div className='field'>
+            <input value={this.state.imageName} type='text' placeholder='enter car name' onChange={this.handleChange} />
+          </div>
           <input  type='submit' />
         </form>
-        <div>{this.state.carDetails.carName}</div>
+        <ImageList imageList = {this.state.imageList}/>
       </div>
     )
   }

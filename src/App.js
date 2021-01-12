@@ -9,7 +9,7 @@ import NotFound from "./pages/404/NotFound"
 
 function App() {
   return (
-    <div className="container-fluid app">
+    <div className='ui container'>
       <Header />
       <Switch>
         <Route exact path= "/" component={HomePage}/>
